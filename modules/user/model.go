@@ -1,10 +1,19 @@
 package user
 
 import (
+	"database/sql"
 	"errors"
-	"github.com/AstroFireWasTaken/ChatAPI/database"
-	"strconv"
+	"github.com/LouisTrinczek-KevinDanne/Chat-API/database"
+	"time"
 )
+
+type User struct {
+	ID           int       `json:"id"`
+	Email        string    `json:"email"`
+	Username     string    `json:"username"`
+	Password     string    `json:"password,omitempty"`
+	CreationTime time.Time `json:"creationTime"`
+}
 
 func CreateUser(user *User) error {
 	res, err := database.Instance.Exec("INSERT INTO users (email, username, password) VALUES (?, ?, ?)", user.Email, user.Username, user.Password)
@@ -16,28 +25,6 @@ func CreateUser(user *User) error {
 		return err
 	}
 	user.ID = int(id)
-
-	return nil
-}
-
-func UpdateUser(user *User) error {
-	_, err := database.Instance.Exec("UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?", user.Email, user.Username, user.Password, user.ID)
-	return err
-}
-
-func DeleteUser(id int) error {
-	res, err := database.Instance.Exec("DELETE FROM users WHERE id = ?", id)
-	if err != nil {
-		return err
-	}
-
-	count, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
-	if count < 1 {
-		return errors.New("No user found with id " + strconv.Itoa(int(id)))
-	}
 
 	return nil
 }
@@ -63,20 +50,25 @@ func FetchUsers() ([]User, error) {
 }
 
 func FetchUserById(id int) (*User, error) {
-	rows, err := database.Instance.Query("SELECT id, email, username, creation_time FROM users WHERE id = ?", id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	if !rows.Next() {
-		return nil, nil
-	}
+	row := database.Instance.QueryRow("SELECT id, email, username, creation_time FROM users WHERE id = ?", id)
 
 	user := &User{}
-	err = rows.Scan(&user.ID, &user.Email, &user.Username, &user.CreationTime)
+	err := row.Scan(&user.ID, &user.Email, &user.Username, &user.CreationTime)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, err
 	}
-
 	return user, nil
+}
+
+func UpdateUser(user *User) error {
+	_, err := database.Instance.Exec("UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?", user.Email, user.Username, user.Password, user.ID)
+	return err
+}
+
+func DeleteUser(id int) error {
+	_, err := database.Instance.Exec("DELETE FROM users WHERE id = ?", id)
+	return err
 }

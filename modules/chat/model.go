@@ -1,9 +1,7 @@
 package chat
 
 import (
-	"github.com/AstroFireWasTaken/ChatAPI/modules/user"
-	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/LouisTrinczek-KevinDanne/Chat-API/modules/user"
 	"time"
 )
 
@@ -28,11 +26,29 @@ type ChannelMessage struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
-func handleGetServers(ctx *gin.Context) {
-	servers := make([]Server, 0)
-	ctx.JSON(http.StatusOK, servers)
+func CreateServer(server *Server) error {
+	// TODO create logic
+	server.ID = 999
+	return nil
 }
 
-func AddRoutes(router *gin.Engine) {
-	router.GET("/servers", handleGetServers)
+func FetchServers() ([]Server, error) {
+	servers := make([]Server, 0)
+	// TODO fetch logic
+	return servers, nil
+}
+
+func FetchServerByID(id int) (*Server, error) {
+	// todo fetch logic
+	return nil, nil
+}
+
+func UpdateServer(server *Server) error {
+	// todo update logic
+	return nil
+}
+
+func DeleteServer(id int) error {
+	// todo delete logic
+	return nil
 }

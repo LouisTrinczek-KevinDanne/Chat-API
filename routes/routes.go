@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/AstroFireWasTaken/ChatAPI/modules/chat"
-	"github.com/AstroFireWasTaken/ChatAPI/modules/user"
+	"github.com/LouisTrinczek-KevinDanne/Chat-API/modules/chat"
+	"github.com/LouisTrinczek-KevinDanne/Chat-API/modules/user"
 	"github.com/gin-gonic/gin"
 )
 

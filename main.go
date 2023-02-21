@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/AstroFireWasTaken/ChatAPI/routes"
+	"github.com/LouisTrinczek-KevinDanne/Chat-API/routes"
 	"github.com/gin-gonic/gin"
 )
 

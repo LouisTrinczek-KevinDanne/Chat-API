@@ -1,4 +1,4 @@
-module github.com/AstroFireWasTaken/ChatAPI
+module github.com/LouisTrinczek-KevinDanne/Chat-API
 
 go 1.20
 
